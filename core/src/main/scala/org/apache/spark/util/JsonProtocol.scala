@@ -271,6 +271,7 @@ private[spark] object JsonProtocol {
   def taskInfoToJson(taskInfo: TaskInfo): JValue = {
     ("Task ID" -> taskInfo.taskId) ~
     ("Index" -> taskInfo.index) ~
+    ("Partition ID" -> taskInfo.partitionId) ~
     ("Attempt" -> taskInfo.attemptNumber) ~
     ("Launch Time" -> taskInfo.launchTime) ~
     ("Executor ID" -> taskInfo.executorId) ~
@@ -689,6 +690,7 @@ private[spark] object JsonProtocol {
   def taskInfoFromJson(json: JValue): TaskInfo = {
     val taskId = (json \ "Task ID").extract[Long]
     val index = (json \ "Index").extract[Int]
+    val partitionId = (json \ "Partition ID").extract[Int]
     val attempt = (json \ "Attempt").extractOpt[Int].getOrElse(1)
     val launchTime = (json \ "Launch Time").extract[Long]
     val executorId = (json \ "Executor ID").extract[String]
@@ -704,7 +706,7 @@ private[spark] object JsonProtocol {
     }
 
     val taskInfo =
-      new TaskInfo(taskId, index, attempt, launchTime, executorId, host, taskLocality, speculative)
+      new TaskInfo(taskId, index, partitionId, attempt, launchTime, executorId, host, taskLocality, speculative)
     taskInfo.gettingResultTime = gettingResultTime
     taskInfo.finishTime = finishTime
     taskInfo.failed = failed

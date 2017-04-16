@@ -29,6 +29,7 @@ import org.apache.spark.annotation.DeveloperApi
 class TaskInfo(
     val taskId: Long,
     val index: Int,
+    val partitionId: Int,
     val attemptNumber: Int,
     val launchTime: Long,
     val executorId: String,

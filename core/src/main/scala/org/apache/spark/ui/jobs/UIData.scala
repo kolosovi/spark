@@ -157,6 +157,7 @@ private[spark] object UIData {
       val newTaskInfo = new TaskInfo(
         taskId = taskInfo.taskId,
         index = taskInfo.index,
+        partitionId = taskInfo.partitionId,
         attemptNumber = taskInfo.attemptNumber,
         launchTime = taskInfo.launchTime,
         executorId = taskInfo.executorId,

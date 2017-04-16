@@ -933,7 +933,7 @@ private object ExecutorAllocationManagerSuite extends PrivateMethodTester {
   }
 
   private def createTaskInfo(taskId: Int, taskIndex: Int, executorId: String): TaskInfo = {
-    new TaskInfo(taskId, taskIndex, 0, 0, executorId, "", TaskLocality.ANY, speculative = false)
+    new TaskInfo(taskId, taskIndex, 0, 0, 0, executorId, "", TaskLocality.ANY, speculative = false)
   }
 
   /* ------------------------------------------------------- *

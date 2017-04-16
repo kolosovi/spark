@@ -191,7 +191,7 @@ class JobProgressListenerSuite extends SparkFunSuite with LocalSparkContext with
     // finish this task, should get updated shuffleRead
     shuffleReadMetrics.incRemoteBytesRead(1000)
     taskMetrics.mergeShuffleReadMetrics()
-    var taskInfo = new TaskInfo(1234L, 0, 1, 0L, "exe-1", "host1", TaskLocality.NODE_LOCAL, false)
+    var taskInfo = new TaskInfo(1234L, 0, 0, 1, 0L, "exe-1", "host1", TaskLocality.NODE_LOCAL, false)
     taskInfo.finishTime = 1
     var task = new ShuffleMapTask(0)
     val taskType = Utils.getFormattedClassName(task)
@@ -202,7 +202,7 @@ class JobProgressListenerSuite extends SparkFunSuite with LocalSparkContext with
 
     // finish a task with unknown executor-id, nothing should happen
     taskInfo =
-      new TaskInfo(1234L, 0, 1, 1000L, "exe-unknown", "host1", TaskLocality.NODE_LOCAL, true)
+      new TaskInfo(1234L, 0, 0, 1, 1000L, "exe-unknown", "host1", TaskLocality.NODE_LOCAL, true)
     taskInfo.finishTime = 1
     task = new ShuffleMapTask(0)
     listener.onTaskEnd(
@@ -210,7 +210,7 @@ class JobProgressListenerSuite extends SparkFunSuite with LocalSparkContext with
     assert(listener.stageIdToData.size === 1)
 
     // finish this task, should get updated duration
-    taskInfo = new TaskInfo(1235L, 0, 1, 0L, "exe-1", "host1", TaskLocality.NODE_LOCAL, false)
+    taskInfo = new TaskInfo(1235L, 0, 0, 1, 0L, "exe-1", "host1", TaskLocality.NODE_LOCAL, false)
     taskInfo.finishTime = 1
     task = new ShuffleMapTask(0)
     listener.onTaskEnd(
@@ -219,7 +219,7 @@ class JobProgressListenerSuite extends SparkFunSuite with LocalSparkContext with
       .executorSummary.getOrElse("exe-1", fail()).shuffleRead === 2000)
 
     // finish this task, should get updated duration
-    taskInfo = new TaskInfo(1236L, 0, 2, 0L, "exe-2", "host1", TaskLocality.NODE_LOCAL, false)
+    taskInfo = new TaskInfo(1236L, 0, 0, 2, 0L, "exe-2", "host1", TaskLocality.NODE_LOCAL, false)
     taskInfo.finishTime = 1
     task = new ShuffleMapTask(0)
     listener.onTaskEnd(
@@ -232,7 +232,7 @@ class JobProgressListenerSuite extends SparkFunSuite with LocalSparkContext with
     val conf = new SparkConf()
     val listener = new JobProgressListener(conf)
     val metrics = TaskMetrics.empty
-    val taskInfo = new TaskInfo(1234L, 0, 3, 0L, "exe-1", "host1", TaskLocality.NODE_LOCAL, false)
+    val taskInfo = new TaskInfo(1234L, 0, 0, 3, 0L, "exe-1", "host1", TaskLocality.NODE_LOCAL, false)
     taskInfo.finishTime = 1
     val task = new ShuffleMapTask(0)
     val taskType = Utils.getFormattedClassName(task)
@@ -289,7 +289,7 @@ class JobProgressListenerSuite extends SparkFunSuite with LocalSparkContext with
     }
 
     def makeTaskInfo(taskId: Long, finishTime: Int = 0): TaskInfo = {
-      val taskInfo = new TaskInfo(taskId, 0, 1, 0L, execId, "host1", TaskLocality.NODE_LOCAL,
+      val taskInfo = new TaskInfo(taskId, 0, 0, 1, 0L, execId, "host1", TaskLocality.NODE_LOCAL,
         false)
       taskInfo.finishTime = finishTime
       taskInfo
@@ -362,7 +362,7 @@ class JobProgressListenerSuite extends SparkFunSuite with LocalSparkContext with
   }
 
   test("drop internal and sql accumulators") {
-    val taskInfo = new TaskInfo(0, 0, 0, 0, "", "", TaskLocality.ANY, false)
+    val taskInfo = new TaskInfo(0, 0, 0, 0, 0, "", "", TaskLocality.ANY, false)
     val internalAccum =
       AccumulableInfo(id = 1, name = Some("internal"), None, None, true, false, None)
     val sqlAccum = AccumulableInfo(

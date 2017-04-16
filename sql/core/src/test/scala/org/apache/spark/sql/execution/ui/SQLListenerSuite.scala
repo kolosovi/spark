@@ -69,6 +69,7 @@ class SQLListenerSuite extends SparkFunSuite with SharedSQLContext {
     taskId = taskId,
     attemptNumber = attemptNumber,
     // The following fields are not used in tests
+    partitionId = 0,
     index = 0,
     launchTime = 0,
     executorId = "",
